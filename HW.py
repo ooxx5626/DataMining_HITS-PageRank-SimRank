@@ -8,13 +8,28 @@ def readFile(fileName): #讀檔
     content = [x.strip('\n') for x in content] 
     return content
     
-def get_node_edge(content):#切成networkx可以用的格式
+def get_node_edge(content, isBiDirected):#切成networkx可以用的格式
     g = {}
     for node in content:
-        line = node.split(',')
-        if(line[0] not in g):
-            g[line[0]]=[]
-        g[line[0]].append(line[1])
+        key = ''
+        value = ''
+        if ',' in node:
+            line = node.split(',')
+            key = line[0]
+            value = line[1]
+        else:
+            line = node.split()
+            key = line[1]
+            value = line[2]
+        if key not in g:
+            g[key]=[]
+        if not value in g[key]:
+            g[key].append(value)
+            if isBiDirected:
+                if value not in g.keys():
+                    g[value]=[]
+                g[value].append(key)
+                
     return g
 if __name__ == "__main__":
     e = {"1":{"3","5"}, 
@@ -22,10 +37,10 @@ if __name__ == "__main__":
     "3":"4",
     "4":"1"
     }
-    content = readFile("hw3dataset/graph_1.txt")
-    e = get_node_edge(content)
-    # print(e)
+    content = readFile("hw3dataset/data.ntrans_1.ascii.tlen_5.nitems_1.npats_2")
+    e = get_node_edge(content, False)
+    print(e)
     G = nx.DiGraph(e)
-    hit_algo(G)
-    # pageRank_algo(G)
+    # hit_algo(G)
+    pageRank_algo(G)
     # SimRank_algo(G,3)

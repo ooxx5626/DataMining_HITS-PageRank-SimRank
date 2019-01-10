@@ -42,6 +42,7 @@ def Absolute (x):
     for i in list(x.values()):
         s += i**2
     return s**0.5
+    # return sum(x.values())
 def t_Nor(x, y, G):
     new_a_page = {}
     new_h_page = {}
